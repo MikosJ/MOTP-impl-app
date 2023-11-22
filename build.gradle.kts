@@ -22,13 +22,12 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    compileOnly("org.projectlombok:lombok")
-    runtimeOnly("com.h2database:h2")
-    annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
+    compileOnly("org.projectlombok:lombok:1.18.26")
+    runtimeOnly("com.h2database:h2:2.1.214")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
     compileOnly("com.warrenstrange:googleauth:1.5.0")
     compileOnly("com.google.zxing:javase:3.5.2")
 }
