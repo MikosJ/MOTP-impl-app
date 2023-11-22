@@ -31,6 +31,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     compileOnly("com.warrenstrange:googleauth:1.4.0")
+    compileOnly("com.google.zxing:javase:3.5.2")
 }
 
 tasks.withType<Test> {
