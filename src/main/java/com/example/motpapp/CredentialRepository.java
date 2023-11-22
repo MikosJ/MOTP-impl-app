@@ -11,9 +11,9 @@ import java.util.Map;
 @Component
 public class CredentialRepository implements ICredentialRepository {
 
-    private final Map<String, User> usersKeys = new HashMap<>(){{
-        put("admin@pk.com", new User("admin","secret", 123,List.of(123,456, 789)));
-        put("moderator@pk.com", new User("moderator","secret", 321,List.of(987,654, 321)));
+    private final Map<String, User> usersKeys = new HashMap<>() {{
+        put("admin@pk.com", new User("admin", "secret", 123, List.of(123, 456, 789)));
+        put("moderator@pk.com", new User("moderator", "secret", 321, List.of(987, 654, 321)));
     }};
 
     @Override
