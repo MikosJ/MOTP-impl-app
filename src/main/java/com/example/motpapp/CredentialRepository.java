@@ -11,7 +11,10 @@ import java.util.Map;
 @Component
 public class CredentialRepository implements ICredentialRepository {
 
-    private final Map<String, User> usersKeys = new HashMap<String, User>();
+    private final Map<String, User> usersKeys = new HashMap<String, User>(){{
+        put("admin@pk.com", null);
+        put("moderator@pk.com", null);
+    }};
 
     @Override
     public String getSecretKey(String userName) {
