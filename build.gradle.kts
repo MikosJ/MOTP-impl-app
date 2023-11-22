@@ -25,12 +25,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
-    compileOnly("com.warrenstrange:googleauth:1.4.0")
+    compileOnly("com.warrenstrange:googleauth:1.5.0")
     compileOnly("com.google.zxing:javase:3.5.2")
 }
 
