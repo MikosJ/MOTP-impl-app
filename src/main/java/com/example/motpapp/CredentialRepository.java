@@ -1,24 +1,27 @@
 package com.example.motpapp;
 
+import com.example.motpapp.model.ScratchCode;
 import com.example.motpapp.model.User;
+import com.example.motpapp.model.UserRepository;
 import com.warrenstrange.googleauth.ICredentialRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class CredentialRepository implements ICredentialRepository {
 
-    private final Map<String, User> usersKeys = new HashMap<>() {{
-        put("admin@pk.com", new User("admin", "secret", 123, List.of(123, 456, 789)));
-        put("moderator@pk.com", new User("moderator", "secret", 321, List.of(987, 654, 321)));
-    }};
+    private final UserRepository userRepository;
+
+    public CredentialRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public String getSecretKey(String userName) {
-        return usersKeys.get(userName).getSecretKey();
+        User demoUser = userRepository.findByUsername(userName).orElseThrow();
+        return demoUser.getSecretKey();
     }
 
     @Override
@@ -26,11 +29,16 @@ public class CredentialRepository implements ICredentialRepository {
                                     String secretKey,
                                     int validationCode,
                                     List<Integer> scratchCodes) {
-        usersKeys.put(userName, new User(userName, secretKey, validationCode, scratchCodes));
+        userRepository.save(User.builder()
+                .username(userName)
+                .secretKey(secretKey)
+                .validationCode(validationCode)
+                .scratchCodes(scratchCodes.stream().map(it -> ScratchCode.builder().code(it).build()).collect(Collectors.toList()))
+                .build());
     }
 
     public User getUser(String username) {
-        return usersKeys.get(username);
+        return userRepository.findByUsername(username).orElseThrow();
     }
 
 }

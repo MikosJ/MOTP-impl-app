@@ -24,6 +24,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
     implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     compileOnly("org.projectlombok:lombok:1.18.26")
     runtimeOnly("com.h2database:h2:2.1.214")
     annotationProcessor("org.projectlombok:lombok:1.18.30")

@@ -2,6 +2,7 @@ package com.example.motpapp.Controller;
 
 import com.example.motpapp.CredentialRepository;
 import com.example.motpapp.DTO.ValidateCodeDto;
+import com.example.motpapp.model.ScratchCode;
 import com.example.motpapp.model.Validation;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -55,7 +56,7 @@ public class OTPController{
     }
 
     private List<Integer> getScratchCodes(@PathVariable String username) {
-        return credentialRepository.getUser(username).getScratchCodes();
+        return credentialRepository.getUser(username).getScratchCodes().stream().map(ScratchCode::getCode).toList();
     }
 
     @PostMapping("/scratches/")
