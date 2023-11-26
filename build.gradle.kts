@@ -31,6 +31,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
     compileOnly("com.warrenstrange:googleauth:1.5.0")
     compileOnly("com.google.zxing:javase:3.5.2")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
 }
 
 tasks.withType<Test> {

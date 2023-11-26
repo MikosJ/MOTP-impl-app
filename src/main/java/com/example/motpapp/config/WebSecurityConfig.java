@@ -1,4 +1,4 @@
-package com.example.motpapp;
+package com.example.motpapp.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
