@@ -1,12 +1,14 @@
 package com.example.motpapp.Controller;
 
+import com.example.motpapp.DTO.UserDto;
 import com.example.motpapp.DTO.UserRegistrationDTO;
+import com.example.motpapp.model.User;
 import com.example.motpapp.model.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/user")
 @RestController
@@ -29,4 +31,6 @@ public class UserController {
             userRepository.save(userToSave);
         }
     }
+
+
 }

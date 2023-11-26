@@ -1,5 +1,6 @@
 package com.example.motpapp.config;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @AllArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig {
+
+    private final GoogleAuthenticator gAuth;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Confirmation - MOTP Demo App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/login.html}">MOTP Demo App</a>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            <div class="card mt-4">
+                <div class="card-header bg-dark text-white">
+                    <h2 class="text-center">Registration Confirmation</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <p>Confirm registration and add your mobile one-time password to Google Authenticator via QR
+                            code. If you dont't do so, you won't be able to log in.</p>
+                    </div>
+                    <form
+                            method="post"
+                            role="form"
+                            th:action="@{/save}"
+                            th:object="${user}"
+                    >
+                        <div class="form-group">
+                            <p class="lead"><strong>Username:</strong> <span th:text="${user.username}"></span></p>
+                        </div>
+                        <div class="form-group">
+                            <p class="lead"><strong>Password:</strong> ******** (for security reasons)</p>
+                        </div>
+                        <div class="form-group text-center">
+                            <img th:src="'data:image/png;base64,' + ${qrCode}" alt="QR Code" class="img-fluid">
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group text-center">
+                            <button class="btn btn-primary" type="submit">Confirm Registration</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
