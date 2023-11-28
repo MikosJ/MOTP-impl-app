@@ -44,10 +44,11 @@
                 <div class="card-body">
                     <form name="login"
                           id="login"
-                            method="post"
-                            role="form"
-                            th:action="@{/login}"
-                            class="form-horizontal"
+                          method="post"
+                          role="form"
+                          th:action="@{/login}"
+                          class="form-horizontal"
+                          onsubmit="return submitForm();"
                     >
                         <div class="form-group mb-3">
                             <label class="control-label"> Username</label>
@@ -82,7 +83,7 @@
                             />
                         </div>
                         <div class="form-group mb-3">
-                            <button class="btn btn-primary" onclick="submitForm()">Submit</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
                             <span> Not registered ?
                                 <a th:href="@{/register}">Register/Signup here</a>
                             </span>
@@ -94,10 +95,6 @@
     </div>
 </div>
 <script>
-    const mojaFunkcja = () => {
-        console.log("Po 3 sekundach...");
-    }
-
     function submitForm() {
         var username = document.getElementById('username').value;
         var otp = document.getElementById('otp').value;
@@ -108,8 +105,8 @@
         };
 
         console.log("Request Data: " + JSON.stringify(requestData));
-        setTimeout(mojaFunkcja, 30000);
-        let response = "";
+
+        // Fetch używany asynchronicznie
         fetch('http://localhost:8080/code/validate/key', {
             method: 'POST',
             headers: {
@@ -119,14 +116,17 @@
         })
             .then(response => response.json())
             .then(data => {
-                response = JSON.stringify(data)
+                console.log("Response Data: " + JSON.stringify(data));
+                if (data.valid === false) {
+                    console.log("False");
+                    document.getElementById('error-message').innerText = 'Invalid OTP. Please try again.';
+                } else {
+                    // Tylko jeśli kod OTP jest poprawny, zwróć true, aby wysłać formularz
+                    if (otp !== "")
+                    document.getElementById('login').submit();
+                }
             });
-        console.log(response);
-        setTimeout(mojaFunkcja, 30000);
-        if (response.valid === false) {
-            return false;
-        }
-
+        return false;
     }
 </script>
 

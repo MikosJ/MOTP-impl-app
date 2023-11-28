@@ -52,6 +52,4 @@ public class WebSecurityConfig {
     public static BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
