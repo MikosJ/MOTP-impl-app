@@ -19,7 +19,7 @@ public class ScratchCode {
     Integer code;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name="username")
     User user;
 
 }

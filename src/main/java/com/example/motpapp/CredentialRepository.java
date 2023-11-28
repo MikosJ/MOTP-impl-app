@@ -3,6 +3,7 @@ package com.example.motpapp;
 import com.example.motpapp.model.ScratchCode;
 import com.example.motpapp.model.User;
 import com.example.motpapp.model.UserRepository;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.ICredentialRepository;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,11 @@ public class CredentialRepository implements ICredentialRepository {
                 .validationCode(validationCode)
                 .scratchCodes(scratchCodes.stream().map(it -> ScratchCode.builder().code(it).build()).collect(Collectors.toList()))
                 .build());
+    }
+
+    public boolean validateCode(String username, int code) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+        return user.getValidationCode() == code;
     }
 
     public User getUser(String username) {

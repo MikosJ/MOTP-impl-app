@@ -8,7 +8,7 @@ group = "com.example"
 version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 configurations {
@@ -32,6 +32,8 @@ dependencies {
     compileOnly("com.warrenstrange:googleauth:1.5.0")
     compileOnly("com.google.zxing:javase:3.5.2")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.jboss.aerogear:aerogear-otp-java:1.0.0")
+
 
 }
 

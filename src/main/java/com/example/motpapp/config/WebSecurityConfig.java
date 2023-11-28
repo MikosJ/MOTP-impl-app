@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @AllArgsConstructor
@@ -16,17 +17,38 @@ public class WebSecurityConfig {
 
     private final GoogleAuthenticator gAuth;
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .httpBasic()
+//                .and()
+//                .csrf().disable()
+//                .headers().frameOptions().disable()
+//                .and()
+//                .authorizeRequests()
+//                .anyRequest()
+//                .permitAll();
+//        return http.build();
+//    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .httpBasic()
-                .and()
-                .csrf().disable()
+        http.csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .authorizeRequests()
-                .anyRequest()
-                .permitAll();
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers(new AntPathRequestMatcher("/register"),new AntPathRequestMatcher("/register/confirm"),new AntPathRequestMatcher("/save")).permitAll())
+                .formLogin(
+                        form -> form
+                                .loginPage("/login")
+                                .loginProcessingUrl("/login")
+                                .defaultSuccessUrl("/index")
+                                .permitAll()
+                ).logout(
+                        logout -> logout
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .permitAll()
+                );
         return http.build();
     }
 
