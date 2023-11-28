@@ -32,6 +32,8 @@ dependencies {
     compileOnly("com.warrenstrange:googleauth:1.5.0")
     compileOnly("com.google.zxing:javase:3.5.2")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE")
+
     implementation("org.jboss.aerogear:aerogear-otp-java:1.0.0")
 
 

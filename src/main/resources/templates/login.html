@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>MOTP Demo App</title>
@@ -14,7 +12,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/index}">MOTP Demo App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -26,7 +25,7 @@
         </div>
     </div>
 </nav>
-<br /><br />
+<br/><br/>
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
@@ -43,7 +42,8 @@
                     <h2 class="text-center">Login Form</h2>
                 </div>
                 <div class="card-body">
-                    <form
+                    <form name="login"
+                          id="login"
                             method="post"
                             role="form"
                             th:action="@{/login}"
@@ -74,7 +74,7 @@
                         <div class="form-group mb-3">
                             <label class="control-label"> One time password</label>
                             <input
-                                    type="text"
+                                    type="number"
                                     id="otp"
                                     name="otp"
                                     class="form-control"
@@ -82,7 +82,7 @@
                             />
                         </div>
                         <div class="form-group mb-3">
-                            <button type="submit" class="btn btn-primary" >Submit</button>
+                            <button class="btn btn-primary" onclick="submitForm()">Submit</button>
                             <span> Not registered ?
                                 <a th:href="@{/register}">Register/Signup here</a>
                             </span>
@@ -93,5 +93,42 @@
         </div>
     </div>
 </div>
+<script>
+    const mojaFunkcja = () => {
+        console.log("Po 3 sekundach...");
+    }
+
+    function submitForm() {
+        var username = document.getElementById('username').value;
+        var otp = document.getElementById('otp').value;
+
+        var requestData = {
+            "code": otp,
+            "username": username
+        };
+
+        console.log("Request Data: " + JSON.stringify(requestData));
+        setTimeout(mojaFunkcja, 30000);
+        let response = "";
+        fetch('http://localhost:8080/code/validate/key', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                response = JSON.stringify(data)
+            });
+        console.log(response);
+        setTimeout(mojaFunkcja, 30000);
+        if (response.valid === false) {
+            return false;
+        }
+
+    }
+</script>
+
 </body>
 </html>
