@@ -31,19 +31,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().headers().frameOptions().disable()
                 .and()
+                .addFilterAfter(otpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(otpAuthenticationProvider())
                 .authorizeRequests((authorize) -> authorize
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/home/**"),
+                                new AntPathRequestMatcher("/index/**"),
+                                new AntPathRequestMatcher("/continue/**")
+                        ).authenticated()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/register/**"),
                                 new AntPathRequestMatcher("/save/**"),
                                 new AntPathRequestMatcher("/login/**"),
                                 new AntPathRequestMatcher("/css/**")
-                        ).permitAll()
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/home/**"),
-                                new AntPathRequestMatcher("/index/**"),
-                                new AntPathRequestMatcher("/continue/**")
-                        )
-                        .authenticated())
+                        ).permitAll())
                 .formLogin(
                         form -> form
                                 .loginPage("/login")
@@ -55,9 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                )
-                .addFilterAfter(otpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(otpAuthenticationProvider());
+                );
     }
 
     @Bean

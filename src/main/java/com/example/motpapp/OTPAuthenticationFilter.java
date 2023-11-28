@@ -25,6 +25,7 @@ public class OTPAuthenticationFilter extends AbstractAuthenticationProcessingFil
         String otp = obtainOTP(request);
         String password = obtainPassword(request);
         String username = obtainUsername(request);
+
         OTPAuthenticationToken authRequest = new OTPAuthenticationToken(otp, username, password);
 
         // Return the authentication token for further processing
@@ -50,4 +51,9 @@ public class OTPAuthenticationFilter extends AbstractAuthenticationProcessingFil
         super.successfulAuthentication(request, response, chain, authResult);
         chain.doFilter(request, response);
     }
+
+
+
+
+
 }

@@ -69,4 +69,10 @@ public class UserWebController {
                                Model model) {
         return "login";
     }
+    @GetMapping("/home")
+    public String home(@ModelAttribute("user") UserDto userDto,
+                               BindingResult result,
+                               Model model) {
+        return "home";
+    }
 }

@@ -3,6 +3,8 @@ package com.example.motpapp;
 import com.example.motpapp.model.User;
 import com.example.motpapp.model.UserRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,6 +36,7 @@ public class OTPAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
+    @NotNull
     private Authentication authenticateOTP(OTPAuthenticationToken authentication) throws AuthenticationException {
         String otp = authentication.getOTP();
         String username = authentication.getName();  // Use getName() instead of getUsername()
