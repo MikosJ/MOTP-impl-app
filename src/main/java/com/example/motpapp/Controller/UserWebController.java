@@ -67,6 +67,6 @@ public class UserWebController {
     public String registration(@ModelAttribute("user") UserDto userDto,
                                BindingResult result,
                                Model model) {
-        return "redirect:/login";
+        return "login";
     }
 }

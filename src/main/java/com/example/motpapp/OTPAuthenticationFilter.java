@@ -1,5 +1,6 @@
 package com.example.motpapp;
 
+import com.example.motpapp.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -22,9 +23,9 @@ public class OTPAuthenticationFilter extends AbstractAuthenticationProcessingFil
             throws AuthenticationException, IOException, ServletException {
         // Extract OTP from the request
         String otp = obtainOTP(request);
-
-        // Create an authentication token
-        OTPAuthenticationToken authRequest = new OTPAuthenticationToken(otp);
+        String password = obtainPassword(request);
+        String username = obtainUsername(request);
+        OTPAuthenticationToken authRequest = new OTPAuthenticationToken(otp, username, password);
 
         // Return the authentication token for further processing
         return getAuthenticationManager().authenticate(authRequest);

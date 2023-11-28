@@ -3,6 +3,7 @@ package com.example.motpapp.config;
 
 import com.example.motpapp.OTPAuthenticationFilter;
 import com.example.motpapp.OTPAuthenticationProvider;
+import com.example.motpapp.model.UserRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private GoogleAuthenticator gAuth;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -44,14 +48,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/home")
+                                .defaultSuccessUrl("/home", true)
+                                .failureUrl("/login?error=true")
                                 .permitAll()
                 ).logout(
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
                 )
-                .addFilterBefore(otpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(otpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(otpAuthenticationProvider());
     }
 
@@ -64,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public OTPAuthenticationProvider otpAuthenticationProvider() {
-        return new OTPAuthenticationProvider(gAuth);
+        return new OTPAuthenticationProvider(gAuth, userRepository, passwordEncoder());
     }
 
     @Override
