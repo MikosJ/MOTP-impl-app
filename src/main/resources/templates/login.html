@@ -30,10 +30,6 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-
-            <div th:if="${param.error}">
-                <div class="alert alert-danger">Invalid Username or Password</div>
-            </div>
             <div th:if="${param.error}" class="alert alert-danger">
                 <p>Bad credentials. Please try again.</p>
             </div>
@@ -49,7 +45,7 @@
                     <form
                             method="post"
                             role="form"
-                            th:action="@{/home}"
+                            th:action="@{/login}"
                             class="form-horizontal"
                     >
                         <div class="form-group mb-3">

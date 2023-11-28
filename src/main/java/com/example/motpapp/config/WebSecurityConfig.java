@@ -1,8 +1,9 @@
 package com.example.motpapp.config;
 
 
-import com.example.motpapp.OTPAuthenticationFilter;
+import com.example.motpapp.AppAuthenticationSuccessHandler;
 import com.example.motpapp.OTPAuthenticationProvider;
+import com.example.motpapp.OTPUsernamePasswordAuthenticationFilter;
 import com.example.motpapp.model.UserRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import static javax.management.Query.and;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -31,8 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().headers().frameOptions().disable()
                 .and()
-                .addFilterAfter(otpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(otpAuthenticationProvider())
                 .authorizeRequests((authorize) -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/home/**"),
@@ -56,12 +57,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                );
+                ).addFilterAfter(otpUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(otpAuthenticationProvider());
     }
 
     @Bean
-    public OTPAuthenticationFilter otpAuthenticationFilter() throws Exception {
-        OTPAuthenticationFilter filter = new OTPAuthenticationFilter(new AntPathRequestMatcher("/login", "POST"));
+    public OTPUsernamePasswordAuthenticationFilter otpUsernamePasswordAuthenticationFilter() throws Exception {
+        OTPUsernamePasswordAuthenticationFilter filter = new OTPUsernamePasswordAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }
@@ -69,6 +71,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public OTPAuthenticationProvider otpAuthenticationProvider() {
         return new OTPAuthenticationProvider(gAuth, userRepository, passwordEncoder());
+    }
+
+    @Bean
+    public AppAuthenticationSuccessHandler appAuthenticationSuccessHandler(){
+        return new AppAuthenticationSuccessHandler();
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.sql.SQLOutput;
 import java.util.Collections;
 
 public class OTPAuthenticationProvider implements AuthenticationProvider {
@@ -29,28 +30,33 @@ public class OTPAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        if (authentication instanceof OTPAuthenticationToken) {
-            return authenticateOTP((OTPAuthenticationToken) authentication);
-        } else {
-            throw new OTPAuthenticationException("Cannot authenticate " + authentication.getClass());
-        }
+            return authenticateOTP(authentication);
     }
 
     @NotNull
-    private Authentication authenticateOTP(OTPAuthenticationToken authentication) throws AuthenticationException {
-        String otp = authentication.getOTP();
+    private Authentication authenticateOTP(Authentication authentication) throws AuthenticationException {
+        String otp = authentication.getCredentials().toString();
+        System.out.println(authentication.getCredentials());
+        System.out.println(authentication.getDetails());
+        System.out.println(authentication.getPrincipal());
+        System.out.println(authentication.getAuthorities());
         String username = authentication.getName();  // Use getName() instead of getUsername()
+        System.out.println("blabsalbsal");
         User user = userRepository.findByUsername(username).orElseThrow(() -> new OTPAuthenticationException("User not found"));
 
         if (gAuth.authorizeUser(username, Integer.parseInt(otp))) {
             // Compare passwords using matches instead of equals
-            if (passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
+            System.out.println(passwordEncoder.encode(authentication.getCredentials().toString()));
+            if (passwordEncoder.matches(authentication.getCredentials().toString(),user.getPassword())) {
+                System.out.println("Password matches");
                 return new UsernamePasswordAuthenticationToken(
                         authentication.getPrincipal(), authentication.getCredentials(), Collections.emptyList());
             } else {
+                System.out.println("Password does not match");
                 throw new OTPAuthenticationException("Invalid Password");
             }
         } else {
+            System.out.println("Otp does not match");
             throw new OTPAuthenticationException("Invalid OTP");
         }
     }
