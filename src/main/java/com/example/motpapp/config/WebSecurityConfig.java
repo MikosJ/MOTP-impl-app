@@ -37,12 +37,20 @@ public class WebSecurityConfig {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/register"),new AntPathRequestMatcher("/register/confirm"),new AntPathRequestMatcher("/save")).permitAll())
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/register"),
+                                new AntPathRequestMatcher("/register/confirm"),
+                                new AntPathRequestMatcher("/save"),
+                                new AntPathRequestMatcher("/login"),
+                                new AntPathRequestMatcher("/home"),
+                                new AntPathRequestMatcher("/continue/**"),
+                                new AntPathRequestMatcher("/css/**")
+                        ).permitAll())
                 .formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/index")
+                                .defaultSuccessUrl("/home")
                                 .permitAll()
                 ).logout(
                         logout -> logout
