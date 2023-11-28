@@ -1,9 +1,10 @@
 package com.example.motpapp.model;
 
-import jakarta.persistence.*;
+
 import lombok.*;
 import org.springframework.context.annotation.Primary;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -20,7 +21,4 @@ public class User {
     String password;
     String secretKey;
     int validationCode;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<ScratchCode> scratchCodes;
 };

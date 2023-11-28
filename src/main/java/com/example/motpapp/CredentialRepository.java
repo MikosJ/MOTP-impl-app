@@ -1,6 +1,5 @@
 package com.example.motpapp;
 
-import com.example.motpapp.model.ScratchCode;
 import com.example.motpapp.model.User;
 import com.example.motpapp.model.UserRepository;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
@@ -34,7 +33,6 @@ public class CredentialRepository implements ICredentialRepository {
                 .username(userName)
                 .secretKey(secretKey)
                 .validationCode(validationCode)
-                .scratchCodes(scratchCodes.stream().map(it -> ScratchCode.builder().code(it).build()).collect(Collectors.toList()))
                 .build());
     }
 

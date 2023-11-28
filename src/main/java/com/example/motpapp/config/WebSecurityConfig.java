@@ -1,51 +1,45 @@
 package com.example.motpapp.config;
 
+
+import com.example.motpapp.OTPAuthenticationFilter;
+import com.example.motpapp.OTPAuthenticationProvider;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@AllArgsConstructor
-@EnableWebSecurity
-public class WebSecurityConfig {
+@EnableWebSecurity(debug = true)
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final GoogleAuthenticator gAuth;
+    @Autowired
+    private GoogleAuthenticator gAuth;
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .httpBasic()
-//                .and()
-//                .csrf().disable()
-//                .headers().frameOptions().disable()
-//                .and()
-//                .authorizeRequests()
-//                .anyRequest()
-//                .permitAll();
-//        return http.build();
-//    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .headers().frameOptions().disable()
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().headers().frameOptions().disable()
                 .and()
-                .authorizeHttpRequests((authorize) -> authorize
+                .authorizeRequests((authorize) -> authorize
                         .requestMatchers(
-                                new AntPathRequestMatcher("/register"),
-                                new AntPathRequestMatcher("/register/confirm"),
-                                new AntPathRequestMatcher("/save"),
-                                new AntPathRequestMatcher("/login"),
-                                new AntPathRequestMatcher("/home"),
-                                new AntPathRequestMatcher("/continue/**"),
+                                new AntPathRequestMatcher("/register/**"),
+                                new AntPathRequestMatcher("/save/**"),
+                                new AntPathRequestMatcher("/login/**"),
                                 new AntPathRequestMatcher("/css/**")
-                        ).permitAll())
+                        ).permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/home/**"),
+                                new AntPathRequestMatcher("/index/**"),
+                                new AntPathRequestMatcher("/continue/**")
+                        )
+                        .authenticated())
                 .formLogin(
                         form -> form
                                 .loginPage("/login")
@@ -56,12 +50,31 @@ public class WebSecurityConfig {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                );
-        return http.build();
+                )
+                .addFilterBefore(otpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(otpAuthenticationProvider());
     }
 
     @Bean
-    public static BCryptPasswordEncoder passwordEncoder() {
+    public OTPAuthenticationFilter otpAuthenticationFilter() throws Exception {
+        OTPAuthenticationFilter filter = new OTPAuthenticationFilter(new AntPathRequestMatcher("/login", "POST"));
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
+    }
+
+    @Bean
+    public OTPAuthenticationProvider otpAuthenticationProvider() {
+        return new OTPAuthenticationProvider(gAuth);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(otpAuthenticationProvider());
+
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
