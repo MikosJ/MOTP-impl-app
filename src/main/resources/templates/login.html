@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/index}">MOTP Demo App</a>
+        <a class="navbar-brand" th:href="@{/home}">MOTP Demo App</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -42,6 +42,9 @@
                     <h2 class="text-center">Login Form</h2>
                 </div>
                 <div class="card-body">
+                    <div class="form-group mb-3">
+                        <span id="error-message" class="text-danger"></span>
+                    </div>
                     <form name="login"
                           id="login"
                           method="post"
@@ -121,7 +124,6 @@
                     console.log("False");
                     document.getElementById('error-message').innerText = 'Invalid OTP. Please try again.';
                 } else {
-                    // Tylko jeśli kod OTP jest poprawny, zwróć true, aby wysłać formularz
                     if (otp !== "")
                     document.getElementById('login').submit();
                 }
